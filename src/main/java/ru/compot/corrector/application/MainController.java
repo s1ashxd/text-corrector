@@ -165,6 +165,8 @@ public class MainController implements Initializable {
     private void onAnalyzeClick() {
         setAnalyzeState(true);
         core.getAnalyzedRegions().clear();
+        linesGroup.getChildren().clear();
+        output.setText(input.getText());
         Service<AnalyzerOutput> service = new Service<>() {
             @Override
             protected Task<AnalyzerOutput> createTask() {
@@ -183,7 +185,6 @@ public class MainController implements Initializable {
                 output.setText("Ошибка при анализе текста");
             } else {
                 ConcurrentHashMap<Integer, Integer> offsets = new ConcurrentHashMap<>();
-                output.setText(input.getText());
                 applyAnalyzedChanges(out, offsets);
                 Bounds areaBounds = output.lookup(".text").getBoundsInParent();
                 core.applyAnalyzedRegions(out, offsets, output.getText(), areaBounds, output.getFont());
