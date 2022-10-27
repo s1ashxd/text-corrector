@@ -13,9 +13,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import ru.compot.corrector.core.AnalyzedRegion;
 import ru.compot.corrector.core.AnalyzerCore;
 import ru.compot.corrector.core.AnalyzerOutput;
+import ru.compot.corrector.utils.splash.SplashScreenUtils;
 
 import java.io.*;
 import java.net.URL;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 
 public class MainController implements Initializable {
 
+    private final Stage primaryStage;
     @FXML
     private TextArea input;
     @FXML
@@ -36,41 +39,34 @@ public class MainController implements Initializable {
     private ContextMenu outputContextMenu;
     @FXML
     private Group linesGroup;
-
     @FXML
     private Button openButton;
     @FXML
     private Button analyzeButton;
     @FXML
     private Button saveButton;
-
-    @FXML
-    private Label openError;
-    @FXML
-    private Label analyzeError;
-    @FXML
-    private Label saveError;
-
     @FXML
     private CheckMenuItem paragraphState;
     @FXML
     private MenuItem sentencesLabel;
     @FXML
     private Slider sentencesSlider;
-
     @FXML
     private CheckMenuItem germanCheck;
     @FXML
     private CheckMenuItem frenchCheck;
     @FXML
     private CheckMenuItem englishCheck;
-
     private AnalyzerCore core;
 
     private File savePath;
     private String saveFile = "corrector-output";
 
     private boolean skipOutputChangeEvent;
+
+    public MainController(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -91,16 +87,6 @@ public class MainController implements Initializable {
                 core.getAnalyzedRegions().clear();
                 linesGroup.getChildren().clear();
             }
-        }));
-
-        openButton.focusedProperty().addListener(((observable, oldValue, newValue) -> {
-            if (!newValue) openError.setVisible(false);
-        }));
-        analyzeButton.focusedProperty().addListener(((observable, oldValue, newValue) -> {
-            if (!newValue) analyzeError.setVisible(false);
-        }));
-        saveButton.focusedProperty().addListener(((observable, oldValue, newValue) -> {
-            if (!newValue) saveError.setVisible(false);
         }));
 
         output.scrollTopProperty().addListener(((observable, oldValue, newValue) -> {
@@ -162,7 +148,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void onAnalyzeClick() {
+    private void onAnalyzeClick(ActionEvent ev) {
         setAnalyzeState(true);
         core.getAnalyzedRegions().clear();
         linesGroup.getChildren().clear();
@@ -181,8 +167,8 @@ public class MainController implements Initializable {
         service.setOnSucceeded((event) -> {
             AnalyzerOutput out = service.getValue();
             if (out == null) {
-                analyzeError.setVisible(true);
                 output.setText("Ошибка при анализе текста");
+                SplashScreenUtils.displayInfoScreen(primaryStage, "error.png", "Fail", "Не удалось анализировать текст");
             } else {
                 ConcurrentHashMap<Integer, Integer> offsets = new ConcurrentHashMap<>();
                 applyAnalyzedChanges(out, offsets);
@@ -190,6 +176,7 @@ public class MainController implements Initializable {
                 core.applyAnalyzedRegions(out, offsets, output.getText(), areaBounds, output.getFont());
                 updateUnderlines();
             }
+            SplashScreenUtils.displayInfoScreen(primaryStage, "success.png", "Success", "Текст проанализирован успешно!");
             setAnalyzeState(false);
         });
         service.start();
@@ -247,7 +234,7 @@ public class MainController implements Initializable {
             saveFile = file.getName();
             input.setText(br.lines().collect(Collectors.joining("\n")));
         } catch (IOException e) {
-            openError.setVisible(true);
+            SplashScreenUtils.displayInfoScreen(primaryStage, "error.png", "Fail", "Не удалось открыть файл");
             e.printStackTrace();
         }
     }
@@ -282,7 +269,7 @@ public class MainController implements Initializable {
             } else fw.write(output.getText());
             fw.flush();
         } catch (IOException e) {
-            openError.setVisible(true);
+            SplashScreenUtils.displayInfoScreen(primaryStage, "error.png", "Fail", "Не удалось сохранить файл");
             e.printStackTrace();
         }
     }

@@ -49,90 +49,72 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="440.0" prefWidth="655.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.compot.corrector.application.MainController">
-  <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="440.0" prefWidth="655.0" VBox.vgrow="ALWAYS">
-         <children>
-            <Label alignment="TOP_CENTER" contentDisplay="BOTTOM" layoutX="182.0" layoutY="40.0" prefHeight="32.0" prefWidth="292.0" text="Анализатор текста" textAlignment="CENTER">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <TextArea fx:id="input" layoutX="14.0" layoutY="115.0" prefHeight="245.0" prefWidth="305.0" wrapText="true">
-               <font>
-                  <Font size="15.0" />
-               </font></TextArea>
-            <TextArea fx:id="output" layoutX="335.0" layoutY="115.0" onMouseClicked="#onOutputClick" prefHeight="245.0" prefWidth="305.0" wrapText="true">
-               <font>
-                  <Font size="15.0" />
-               </font>
-               <contextMenu>
-                  <ContextMenu fx:id="outputContextMenu" />
-               </contextMenu>
-            </TextArea>
-            <Separator layoutX="325.0" layoutY="118.0" orientation="VERTICAL" prefHeight="239.0" prefWidth="3.0" />
-            <Button fx:id="openButton" alignment="CENTER" contentDisplay="CENTER" layoutX="114.0" layoutY="389.0" mnemonicParsing="false" onAction="#onOpenClick" prefHeight="32.0" prefWidth="105.0" text="Open file" />
-            <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" layoutX="435.0" layoutY="389.0" mnemonicParsing="false" onAction="#onSaveClick" prefHeight="32.0" prefWidth="105.0" text="Save to file" />
-            <Label alignment="TOP_CENTER" layoutX="76.0" layoutY="79.0" text="Анализируемый текст">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="402.0" layoutY="79.0" text="Исправленный текст">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Button fx:id="analyzeButton" alignment="CENTER" contentDisplay="CENTER" layoutX="272.0" layoutY="389.0" mnemonicParsing="false" onAction="#onAnalyzeClick" prefHeight="32.0" prefWidth="105.0" text="Analyze" />
-            <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="655.0">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onNewClick" text="New" />
-                    <MenuItem mnemonicParsing="false" onAction="#onOpenClick" text="Open..." />
-                        <MenuItem mnemonicParsing="false" onAction="#onSaveClick" text="Save As..." />
-                  </items>
+<VBox prefHeight="440.0" prefWidth="655.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane prefHeight="440.0" prefWidth="655.0" VBox.vgrow="ALWAYS">
+        <Label alignment="TOP_CENTER" contentDisplay="BOTTOM" layoutX="182.0" layoutY="40.0" prefHeight="32.0" prefWidth="292.0" text="Анализатор текста" textAlignment="CENTER">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <TextArea fx:id="input" layoutX="14.0" layoutY="115.0" prefHeight="245.0" prefWidth="305.0" wrapText="true">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </TextArea>
+        <TextArea fx:id="output" layoutX="335.0" layoutY="115.0" onMouseClicked="#onOutputClick" prefHeight="245.0" prefWidth="305.0" wrapText="true">
+            <font>
+                <Font size="15.0" />
+            </font>
+            <contextMenu>
+                <ContextMenu fx:id="outputContextMenu" />
+            </contextMenu>
+        </TextArea>
+        <Separator layoutX="325.0" layoutY="118.0" orientation="VERTICAL" prefHeight="239.0" prefWidth="3.0" />
+        <Button fx:id="openButton" alignment="CENTER" contentDisplay="CENTER" layoutX="114.0" layoutY="389.0" mnemonicParsing="false" onAction="#onOpenClick" prefHeight="32.0" prefWidth="105.0" text="Open file" />
+        <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" layoutX="435.0" layoutY="389.0" mnemonicParsing="false" onAction="#onSaveClick" prefHeight="32.0" prefWidth="105.0" text="Save to file" />
+        <Label alignment="TOP_CENTER" layoutX="76.0" layoutY="79.0" text="Анализируемый текст">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="402.0" layoutY="79.0" text="Исправленный текст">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Button fx:id="analyzeButton" alignment="CENTER" contentDisplay="CENTER" layoutX="272.0" layoutY="389.0" mnemonicParsing="false" onAction="#onAnalyzeClick" prefHeight="32.0" prefWidth="105.0" text="Analyze" />
+        <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="655.0">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" onAction="#onNewClick" text="New" />
+                <MenuItem mnemonicParsing="false" onAction="#onOpenClick" text="Open..." />
+                <MenuItem mnemonicParsing="false" onAction="#onSaveClick" text="Save As..." />
+            </Menu>
+            <Menu mnemonicParsing="false" text="Preferences">
+                <Menu mnemonicParsing="false" text="Разделение на абзацы">
+                    <CheckMenuItem fx:id="paragraphState" mnemonicParsing="false" onAction="#onParagraphStateClick" selected="true" text="Включено" />
+                    <MenuItem fx:id="sentencesLabel" disable="true" mnemonicParsing="false" text="Предложений в абзаце: 10" />
+                    <CustomMenuItem mnemonicParsing="false" onAction="#onSliderClick" text="Sentences">
+                        <content>
+                            <Slider fx:id="sentencesSlider" max="50.0" min="1.0" value="10.0" />
+                        </content>
+                    </CustomMenuItem>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Preferences">
-                  <items>
-                        <Menu mnemonicParsing="false" text="Разделение на абзацы">
-                          <items>
-                              <CheckMenuItem fx:id="paragraphState" mnemonicParsing="false" onAction="#onParagraphStateClick" selected="true" text="Включено" />
-                              <MenuItem fx:id="sentencesLabel" disable="true" mnemonicParsing="false" text="Предложений в абзаце: 10" />
-                              <CustomMenuItem mnemonicParsing="false" onAction="#onSliderClick" text="Sentences">
-                                 <content>
-                                    <Slider fx:id="sentencesSlider" max="50.0" min="1.0" value="10.0" />
-                                 </content>
-                              </CustomMenuItem>
-                          </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Языки">
-                           <items>
-                              <CheckMenuItem disable="true" mnemonicParsing="false" selected="true" text="Russian" />
-                              <CheckMenuItem fx:id="germanCheck" mnemonicParsing="false" onAction="#onGermanClick" text="German" />
-                              <CheckMenuItem fx:id="englishCheck" mnemonicParsing="false" onAction="#onEnglishClick" text="English" />
-                              <CheckMenuItem fx:id="frenchCheck" mnemonicParsing="false" onAction="#onFrenchClick" text="French" />
-                           </items>
-                        </Menu>
-                  </items>
+                <Menu mnemonicParsing="false" text="Языки">
+                    <CheckMenuItem disable="true" mnemonicParsing="false" selected="true" text="Russian" />
+                    <CheckMenuItem fx:id="germanCheck" mnemonicParsing="false" onAction="#onGermanClick" text="German" />
+                    <CheckMenuItem fx:id="englishCheck" mnemonicParsing="false" onAction="#onEnglishClick" text="English" />
+                    <CheckMenuItem fx:id="frenchCheck" mnemonicParsing="false" onAction="#onFrenchClick" text="French" />
                 </Menu>
-              </menus>
-            </MenuBar>
-            <Group fx:id="analyzeState" layoutX="371.0" layoutY="201.0" visible="false">
-               <children>
-                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="74.0" opacity="0.95" stroke="#8d8c8c" strokeType="INSIDE" width="221.0" />
-                  <Label layoutX="19.0" layoutY="18.0" text="Анализируем..." textFill="#797979">
-                     <font>
-                        <Font size="27.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Group>
-            <Label fx:id="openError" layoutX="86.0" layoutY="364.0" text="Ошибка при открытии файла" textFill="#ff4f4f" visible="false" />
-            <Label fx:id="analyzeError" layoutX="248.0" layoutY="364.0" text="Ошибка при анализе текста" textFill="#ff4f4f" visible="false" />
-            <Label fx:id="saveError" layoutX="400.0" layoutY="364.0" text="Ошибка при сохранении файла" textFill="#ff4f4f" visible="false" />
-            <Group fx:id="linesGroup" layoutX="335.0" layoutY="115.0" />
-         </children>
+            </Menu>
+        </MenuBar>
+        <Group fx:id="analyzeState" layoutX="371.0" layoutY="201.0" visible="false">
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="74.0" opacity="0.95" stroke="#8d8c8c" strokeType="INSIDE" width="221.0" />
+            <Label layoutX="19.0" layoutY="18.0" text="Анализируем..." textFill="#797979">
+                <font>
+                    <Font size="27.0" />
+                </font>
+            </Label>
+        </Group>
+        <Group fx:id="linesGroup" layoutX="335.0" layoutY="115.0" />
     </AnchorPane>
-  </children>
 </VBox>
