@@ -15,6 +15,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
+        fxmlLoader.setController(new MainController(stage));
         Scene scene = new Scene(fxmlLoader.load(), 655, 440);
         stage.setTitle("Text Corrector");
         stage.setScene(scene);
