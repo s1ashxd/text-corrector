@@ -168,7 +168,7 @@ public class MainController implements Initializable {
             AnalyzerOutput out = service.getValue();
             if (out == null) {
                 output.setText("Ошибка при анализе текста");
-                SplashScreenUtils.displayInfoScreen(primaryStage, "checked.png", "Fail", "Не удалось анализировать текст");
+                SplashScreenUtils.displayInfoScreen(primaryStage, "error.png", "Fail", "Не удалось анализировать текст");
             } else {
                 ConcurrentHashMap<Integer, Integer> offsets = new ConcurrentHashMap<>();
                 applyAnalyzedChanges(out, offsets);
@@ -176,7 +176,7 @@ public class MainController implements Initializable {
                 core.applyAnalyzedRegions(out, offsets, output.getText(), areaBounds, output.getFont());
                 updateUnderlines();
             }
-            SplashScreenUtils.displayInfoScreen(primaryStage, "checked.png", "Success", "Текст проанализирован успешно!");
+            SplashScreenUtils.displayInfoScreen(primaryStage, "success.png", "Success", "Текст проанализирован успешно!");
             setAnalyzeState(false);
         });
         service.start();
@@ -234,7 +234,7 @@ public class MainController implements Initializable {
             saveFile = file.getName();
             input.setText(br.lines().collect(Collectors.joining("\n")));
         } catch (IOException e) {
-            SplashScreenUtils.displayInfoScreen(primaryStage, "checked.png", "Fail", "Не удалось открыть файл");
+            SplashScreenUtils.displayInfoScreen(primaryStage, "error.png", "Fail", "Не удалось открыть файл");
             e.printStackTrace();
         }
     }
@@ -269,7 +269,7 @@ public class MainController implements Initializable {
             } else fw.write(output.getText());
             fw.flush();
         } catch (IOException e) {
-            SplashScreenUtils.displayInfoScreen(primaryStage, "checked.png", "Fail", "Не удалось сохранить файл");
+            SplashScreenUtils.displayInfoScreen(primaryStage, "error.png", "Fail", "Не удалось сохранить файл");
             e.printStackTrace();
         }
     }
