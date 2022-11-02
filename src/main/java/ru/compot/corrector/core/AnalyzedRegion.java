@@ -7,11 +7,29 @@ import ru.compot.corrector.utils.AreaUtils;
 
 import java.util.List;
 
+/**
+ * Проанализируемый регион
+ */
 public class AnalyzedRegion {
+    /**
+     * Смещение всех регионов по оси y в следствии скролла поля для вывода
+     */
     public static double yOffset;
+    /**
+     * Начало региона
+     */
     public int from;
+    /**
+     * Исходный вариант и исправленный
+     */
     public String source, replacement;
+    /**
+     * Другие исправления
+     */
     public List<String> allReplacements;
+    /**
+     * Границы региона на экране
+     */
     public double x, y, width, height;
 
     public AnalyzedRegion(int from, String source, String replacement, List<String> allReplacements) {
@@ -21,6 +39,12 @@ public class AnalyzedRegion {
         this.allReplacements = allReplacements;
     }
 
+    /**
+     * Метод обновления границ региона на экране
+     * @param outputAreaBounds границы поля для вывода
+     * @param outputAreaFont шрифт поля для вывода
+     * @param beforeText текст перед регионом
+     */
     public void updatePosition(Bounds outputAreaBounds, Font outputAreaFont, String beforeText) {
         Bounds textBounds = AreaUtils.getTextSize(replacement, outputAreaFont);
         Point2D p = AnalyzerCore.getMatchPosition(

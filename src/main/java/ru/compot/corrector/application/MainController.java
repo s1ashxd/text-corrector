@@ -28,40 +28,94 @@ import java.util.stream.Collectors;
 
 public class MainController implements Initializable {
 
+    /**
+     * Главное окно
+     */
     private final Stage primaryStage;
+    /**
+     * Поле ввода
+     */
     @FXML
     private TextArea input;
+    /**
+     * Поле вывода
+     */
     @FXML
     private TextArea output;
+    /**
+     * Текст на поле для вывода во время анализа
+     */
     @FXML
     private Group analyzeState;
+    /**
+     * Контекстное меню поля для ввода
+     */
     @FXML
     private ContextMenu outputContextMenu;
+    /**
+     * Группа со всеми подчеркиваниями
+     */
     @FXML
     private Group linesGroup;
+    /**
+     * Кнопка открытия файла
+     */
     @FXML
     private Button openButton;
+    /**
+     * Кнопка анализа
+     */
     @FXML
     private Button analyzeButton;
+    /**
+     * Кнопка сохранения
+     */
     @FXML
     private Button saveButton;
+    /**
+     * Чекбокс в меню Preferences отвечающий за включение разделения текста на абзацы
+     */
     @FXML
     private CheckMenuItem paragraphState;
+    /**
+     * Текст с количеством предложений в абзаце
+     */
     @FXML
     private MenuItem sentencesLabel;
+    /**
+     * Слайдер для изменения кол-ва предложений в абзаце
+     */
     @FXML
     private Slider sentencesSlider;
+    /**
+     * Чекбокс, отвечающий за включение анализа немецкого языка
+     */
     @FXML
     private CheckMenuItem germanCheck;
+    /**
+     * Чекбокс, отвечающий за включение анализа французкого языка
+     */
     @FXML
     private CheckMenuItem frenchCheck;
+    /**
+     * Чекбокс, отвечающий за включение анализа английского языка
+     */
     @FXML
     private CheckMenuItem englishCheck;
     private AnalyzerCore core;
 
+    /**
+     * Папка последнего открытого файла
+     */
     private File savePath;
+    /**
+     * Название последнего открытого файла
+     */
     private String saveFile = "corrector-output";
 
+    /**
+     * Пропустить следущее событие изменения поля для ввода?
+     */
     private boolean skipOutputChangeEvent;
 
     public MainController(Stage primaryStage) {
@@ -148,7 +202,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void onAnalyzeClick(ActionEvent ev) {
+    private void onAnalyzeClick() {
         setAnalyzeState(true);
         core.getAnalyzedRegions().clear();
         linesGroup.getChildren().clear();
