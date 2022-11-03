@@ -14,6 +14,13 @@ public class SplashScreenUtils {
     private SplashScreenUtils() {
     }
 
+    /**
+     * Открывает уведомление в новом окне
+     * @param owner главная сцена, из которой вызывается уведомление
+     * @param icon иконка
+     * @param title заголовок
+     * @param body текст уведомления
+     */
     public static void displayInfoScreen(Stage owner, String icon, String title, String body) {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(SplashScreenUtils.class.getResource("splashscreen-view.fxml"));

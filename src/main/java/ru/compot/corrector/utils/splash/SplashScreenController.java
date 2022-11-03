@@ -8,10 +8,22 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Контроллер окна с уведомлением
+ */
 public class SplashScreenController implements Initializable {
 
+    /**
+     * Текст уведомления
+     */
     private final String body;
+    /**
+     * Окно уведомления
+     */
     private final Stage stage;
+    /**
+     * Текст уведомления в окне
+     */
     @FXML
     private Label label;
 
@@ -25,6 +37,9 @@ public class SplashScreenController implements Initializable {
         label.setText(body);
     }
 
+    /**
+     * Отловщик события нажатия на кнопку Ok
+     */
     @FXML
     private void onButtonAction() {
         stage.hide();

@@ -154,6 +154,10 @@ public class MainController implements Initializable {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> core.save()));
     }
 
+    /**
+     * Отловщик события нажатия мышкой на поле для вывода
+     * @param event информация события
+     */
     @FXML
     private void onOutputClick(MouseEvent event) {
         if (core.getAnalyzedRegions().size() < 1 || event.getButton() != MouseButton.SECONDARY) return;
@@ -201,6 +205,9 @@ public class MainController implements Initializable {
         return mi;
     }
 
+    /**
+     * Отловщик события нажатия мышкой на кнопку анализа
+     */
     @FXML
     private void onAnalyzeClick() {
         setAnalyzeState(true);
@@ -277,6 +284,9 @@ public class MainController implements Initializable {
         analyzeState.setVisible(state);
     }
 
+    /**
+     * Отловщик события нажатия мышкой на кнопку открытия файла
+     */
     @FXML
     private void onOpenClick() {
         openButton.setDisable(true);
@@ -293,6 +303,9 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Отловщик события нажатия мышкой на кнопку сохранения файла
+     */
     @FXML
     private void onSaveClick() {
         saveButton.setDisable(true);
@@ -328,33 +341,51 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Отловщик события нажатия мышкой на кнопку New в меню File
+     */
     @FXML
     private void onNewClick() {
         input.setText("");
         output.setText("");
     }
 
+    /**
+     * Отловщик события нажатия мышкой на чекбокс Разделение на абзацы в меню Preferences
+     */
     @FXML
     private void onParagraphStateClick() {
         core.setParagraphsEnabled(paragraphState.isSelected());
     }
 
+    /**
+     * Отловщик события нажатия мышкой на слайдер регулирования кол-ва предложений в абзаце в меню Preferences
+     */
     @FXML
     private void onSliderClick() {
         int sentences = (int) sentencesSlider.getValue();
         core.setSentencesInParagraph(sentences);
     }
 
+    /**
+     * Отловщик события нажатия мышкой на чекбокс German в меню Preferences
+     */
     @FXML
     private void onGermanClick() {
         core.setGermanEnabled(germanCheck.isSelected());
     }
 
+    /**
+     * Отловщик события нажатия мышкой на чекбокс French в меню Preferences
+     */
     @FXML
     private void onFrenchClick() {
         core.setFrenchEnabled(frenchCheck.isSelected());
     }
 
+    /**
+     * Отловщик события нажатия мышкой на чекбокс English в меню Preferences
+     */
     @FXML
     private void onEnglishClick() {
         core.setEnglishEnabled(englishCheck.isSelected());

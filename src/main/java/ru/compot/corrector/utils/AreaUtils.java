@@ -9,6 +9,13 @@ public class AreaUtils {
     private AreaUtils() {
     }
 
+    /**
+     * Считает колчиество строк в текстовом поле
+     * @param areaBounds границы поля
+     * @param font шрифт поля
+     * @param srcText текст в поле
+     * @return кол-во строк в поле
+     */
     public static int getLinesInArea(Bounds areaBounds, Font font, String srcText) {
         String[] words = srcText.split(" ");
         int lines = 1;
@@ -43,6 +50,13 @@ public class AreaUtils {
         return lines;
     }
 
+    /**
+     * Считает длину последней строки в пикселях в поле
+     * @param areaBounds границы поля
+     * @param font шрифт поля
+     * @param srcText текст в поле
+     * @return длина последней строки в пикселях
+     */
     public static double getLastLineWidth(Bounds areaBounds, Font font, String srcText) {
         String[] words = srcText.split(" ");
         double lineWidth = 0d;
@@ -72,12 +86,25 @@ public class AreaUtils {
         return lineWidth;
     }
 
+    /**
+     * Считает размеры текста на экране
+     * @param srcText текст
+     * @param font шрифт текста
+     * @return границы текста на экране
+     */
     public static Bounds getTextSize(String srcText, Font font) {
         Text text = new Text(srcText);
         text.setFont(font);
         return text.getBoundsInLocal();
     }
 
+    /**
+     * Обрезает строку по длине в пикскелях
+     * @param font шрифт строки
+     * @param src строка
+     * @param width ширина в пикселях
+     * @return обрезанная строка по длине в пикселях
+     */
     private static String substringByWidth(Font font, String src, double width) {
         Text srcText = new Text(src);
         srcText.setFont(font);
