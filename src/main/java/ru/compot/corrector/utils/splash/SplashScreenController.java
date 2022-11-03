@@ -42,6 +42,6 @@ public class SplashScreenController implements Initializable {
      */
     @FXML
     private void onButtonAction() {
-        stage.hide();
+        stage.hide(); // прячем окно
     }
 }

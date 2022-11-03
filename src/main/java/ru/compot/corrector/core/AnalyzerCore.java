@@ -56,9 +56,10 @@ public class AnalyzerCore {
 
     public AnalyzerCore() {
         try (FileInputStream fis = new FileInputStream(PREFERENCES_PATH + File.separator + "preferences.properties")) {
-            properties.load(fis);
+            properties.load(fis); // загружаем сохраненные настройки
         } catch (IOException ignored) {
         }
+        // ---- создаем анализаторы ----
         russianAnalyzer = new JLanguageTool(new Russian());
         germanAnalyzer = new JLanguageTool(new GermanyGerman());
         englishAnalyzer = new JLanguageTool(new BritishEnglish());
@@ -69,17 +70,17 @@ public class AnalyzerCore {
      * Получение смещения символов по индексу
      * Смещение происходит при замене слов с разным количеством символов
      * Например, слово "дшруг" при анализе будет исправлено на слово "друг".
-     * В проанализируемом тексте все последующие символы после символа "д" сместятся на 1 символ назад (смещение = 1).
+     * В проанализируемом тексте все последующие символы после символа "д" сместятся на 1 символ назад (смещение = -1).
      * @param offsets карта всех смещений, получаемых по позиции символа в тексте
      * @param fromPosition позиция символа в тексте
      * @return смещение символов
      */
     public static int getOffset(Map<Integer, Integer> offsets, int fromPosition) {
-        return offsets.keySet()
-                .stream()
-                .filter(i -> fromPosition >= i)
-                .mapToInt(offsets::get)
-                .sum();
+        return offsets.keySet() // проходимся по ключам карты
+                .stream() // делаем из них поток
+                .filter(i -> fromPosition >= i) // фильтруем все позиции, которые больше или равны fromPosition
+                .mapToInt(offsets::get) // переделываем поток ключей в поток значений по этим ключам
+                .sum(); // получаем сумму смещений
     }
 
     /**
@@ -92,13 +93,13 @@ public class AnalyzerCore {
      */
     public static Point2D getMatchPosition(Bounds outputAreaBounds, Font outputAreaFont, String beforeText, Bounds textBounds) {
         double regionX = outputAreaBounds.getMinX()
-                + AreaUtils.getLastLineWidth(outputAreaBounds, outputAreaFont, beforeText);
+                + AreaUtils.getLastLineWidth(outputAreaBounds, outputAreaFont, beforeText); // вычисляем x
         double regionY = outputAreaBounds.getMinY()
                 + (AreaUtils.getLinesInArea(outputAreaBounds, outputAreaFont, beforeText) - 1)
-                * (textBounds.getHeight() + 1);
-        if (regionX + textBounds.getWidth() > outputAreaBounds.getWidth()) {
-            regionX = outputAreaBounds.getMinX();
-            regionY += textBounds.getHeight() + 1;
+                * (textBounds.getHeight() + 1); // вычисляем y
+        if (regionX + textBounds.getWidth() > outputAreaBounds.getWidth()) { // если x + размер текста больше чем длина поля для вывода
+            regionX = outputAreaBounds.getMinX(); // x обнуляем
+            regionY += textBounds.getHeight() + 1; // y переносим на новую строку
         }
         return new Point2D(regionX, regionY);
     }
@@ -195,11 +196,12 @@ public class AnalyzerCore {
     /**
      * Запускает анализ текста
      * @param input текст
-     * @return объект AnalyzerOutput с исправлениями
+     * @return объект AnalyzerOutput с исправлениями или null, если произошла ошибка
      */
     public AnalyzerOutput analyze(String input) {
         try {
-            CopyOnWriteArrayList<RuleMatch> matches = new CopyOnWriteArrayList<>();
+            CopyOnWriteArrayList<RuleMatch> matches = new CopyOnWriteArrayList<>(); // создаем список исправлений
+            // ---- анализируем и добавляем исправления в лист ----
             russianAnalyzer.check(input, matches::add);
             if (isGermanEnabled()) germanAnalyzer.check(input, matches::add);
             if (isFrenchEnabled()) frenchAnalyzer.check(input, matches::add);
@@ -207,7 +209,7 @@ public class AnalyzerCore {
             return new AnalyzerOutput(input, matches);
         } catch (Throwable e) {
             e.printStackTrace();
-            return null;
+            return null; // при ошибке вернем пустоту
         }
     }
 
@@ -220,19 +222,19 @@ public class AnalyzerCore {
      * @param outputAreaFont шрифт поля для вывода текста
      */
     public void applyAnalyzedRegions(AnalyzerOutput output, Map<Integer, Integer> offsets, String outputText, Bounds outputAreaBounds, Font outputAreaFont) {
-        for (RuleMatch rm : output.matches()) {
-            int offset = AnalyzerCore.getOffset(offsets, rm.getFromPos());
-            String part1 = outputText.substring(0, rm.getFromPos() + offset);
-            String source = output.inputText().substring(rm.getFromPos(), rm.getToPos());
-            String replacement = rm.getSuggestedReplacements().size() > 0 ? rm.getSuggestedReplacements().get(0) : source;
-            AnalyzedRegion ar = new AnalyzedRegion(
-                    rm.getFromPos() + offset,
-                    source,
-                    replacement,
-                    rm.getSuggestedReplacements()
+        for (RuleMatch rm : output.matches()) { // проходимся по каждому исправлению
+            int offset = AnalyzerCore.getOffset(offsets, rm.getFromPos()); // получаем его смещение
+            String part1 = outputText.substring(0, rm.getFromPos() + offset); // получаем текст перед исправлением
+            String source = output.inputText().substring(rm.getFromPos(), rm.getToPos()); // слово с ошибкой
+            String replacement = rm.getSuggestedReplacements().size() > 0 ? rm.getSuggestedReplacements().get(0) : source; // замена
+            AnalyzedRegion ar = new AnalyzedRegion( // создаем регион
+                    rm.getFromPos() + offset, // позиция
+                    source, // слово с ошибкой
+                    replacement, // текущая замена
+                    rm.getSuggestedReplacements() // другие замены
             );
-            ar.updatePosition(outputAreaBounds, outputAreaFont, part1);
-            analyzedRegions.add(ar);
+            ar.updatePosition(outputAreaBounds, outputAreaFont, part1); // обновляем позицию этого региона
+            analyzedRegions.add(ar); // добавляем в список проанализированных регионов
         }
     }
 
@@ -241,13 +243,13 @@ public class AnalyzerCore {
      */
     public void save() {
         try {
-            File file = new File(PREFERENCES_PATH + File.separator + "preferences.properties");
-            if (!file.exists()) {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
+            File file = new File(PREFERENCES_PATH + File.separator + "preferences.properties"); // получаем файл для сохранения
+            if (!file.exists()) { // если его не существует
+                file.getParentFile().mkdirs(); // создаем родительские папки
+                file.createNewFile(); // создаем новый файл
             }
             FileOutputStream fos = new FileOutputStream(file);
-            properties.store(fos, null);
+            properties.store(fos, null); // записываем
         } catch (IOException e) {
             e.printStackTrace();
         }

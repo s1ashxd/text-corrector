@@ -46,13 +46,14 @@ public class AnalyzedRegion {
      * @param beforeText текст перед регионом
      */
     public void updatePosition(Bounds outputAreaBounds, Font outputAreaFont, String beforeText) {
-        Bounds textBounds = AreaUtils.getTextSize(replacement, outputAreaFont);
-        Point2D p = AnalyzerCore.getMatchPosition(
+        Bounds textBounds = AreaUtils.getTextSize(replacement, outputAreaFont); // получаем размеры текста на экране
+        Point2D p = AnalyzerCore.getMatchPosition( // получаем позицию региона на экране
                 outputAreaBounds,
                 outputAreaFont,
                 beforeText,
                 textBounds
         );
+        // ---- записываем значения ----
         this.x = p.getX();
         this.y = p.getY();
         this.width = textBounds.getWidth();

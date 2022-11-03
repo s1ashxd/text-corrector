@@ -22,17 +22,17 @@ public class SplashScreenUtils {
      * @param body текст уведомления
      */
     public static void displayInfoScreen(Stage owner, String icon, String title, String body) {
-        Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(SplashScreenUtils.class.getResource("splashscreen-view.fxml"));
-        loader.setController(new SplashScreenController(body, stage));
-        stage.getIcons().add(new Image(Objects.requireNonNull(SplashScreenUtils.class.getResourceAsStream(icon))));
-        stage.setTitle(title);
+        Stage stage = new Stage(); // создаем окно
+        FXMLLoader loader = new FXMLLoader(SplashScreenUtils.class.getResource("splashscreen-view.fxml")); // загружаем его разметку
+        loader.setController(new SplashScreenController(body, stage)); // задаем контроллер
+        stage.getIcons().add(new Image(Objects.requireNonNull(SplashScreenUtils.class.getResourceAsStream(icon)))); // задаем иконку
+        stage.setTitle(title); // задаем заголовок
         try {
-            Scene scene = new Scene(loader.load());
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initOwner(owner);
-            stage.setScene(scene);
-            stage.show();
+            Scene scene = new Scene(loader.load()); // создаем сцену
+            stage.initModality(Modality.APPLICATION_MODAL); // это будет модальное окно
+            stage.initOwner(owner); // определение родительского экрана
+            stage.setScene(scene); // определяем сцену
+            stage.show(); // показываем окно
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
